@@ -1,5 +1,5 @@
 {
-    "name": "MgSoftware/Image",
+    "name": "mg-software/laravel-image",
     "description": "Component for handling application images.",
     "keywords": ["laravel", "image", "resize"],
     "authors": [
