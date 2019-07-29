@@ -1,0 +1,24 @@
+{
+    "name": "MgSoftware/Image",
+    "description": "Component for handling application images.",
+    "keywords": ["laravel", "image", "resize"],
+    "authors": [
+        {
+            "name": "Maris Graudins",
+            "role": "Developer"
+        },
+        {
+            "name": "Arturs Kupcs",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MgSoftware\\Image\\": "src/"
+        }
+    }
+}
