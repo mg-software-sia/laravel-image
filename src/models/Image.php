@@ -3,6 +3,7 @@
 namespace MgSoftware\Image\models;
 
 use Illuminate\Database\Eloquent\Model;
+use MgSoftware\Image\components\ImageComponent;
 
 /**
  * Class Image
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $height
  * @property int $width
  * @property \Illuminate\Support\Carbon $created_at
+ * @property ImageThumb[] $thumbs
  * @package MgSoftware\Image\models
  * @method static \Illuminate\Database\Eloquent\Builder|\MgSoftware\Image\models\Image newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\MgSoftware\Image\models\Image newQuery()
@@ -30,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
 
+    private $_thumbPaths;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -42,13 +46,28 @@ class Image extends Model
         'created_at'
     ];
 
+    public function getThumbs()
+    {
+        $this->hasMany(ImageThumb::class);
+    }
+
     /**
      * Returns public url of image
+     * @param int $type
      * @return string
      */
-    public function getUrl()
+    public function getUrl(int $type): string
     {
-        return '';
+        if (!$this->_thumbPaths) {
+            $this->_thumbPaths = [];
+            foreach ($this->thumbs as $thumb) {
+                $this->_thumbPaths[$thumb->type] = $thumb->path;
+            }
+        }
+        $path = $this->_thumbPaths[$type];
+        /** @var ImageComponent $image */
+        $image = app('image');
+        return $image->getImageUrl($path);
     }
 
 }

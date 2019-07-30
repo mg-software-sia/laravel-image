@@ -3,6 +3,7 @@
 namespace MgSoftware\Image\models;
 
 use Illuminate\Database\Eloquent\Model;
+use MgSoftware\Image\components\ResizeComponent;
 
 /**
  * MgSoftware\Image\models\ImageThumb
@@ -39,4 +40,27 @@ class ImageThumb extends Model
         'width',
         'created_at'
     ];
+
+    public function getImage()
+    {
+        return $this->belongsTo(Image::class);
+    }
+
+    public static function buildAttributes($params)
+    {
+        $attributes = [
+            'width' => static::_nullIfNotExists(ResizeComponent::PARAM_WIDTH, $params),
+            'height' => static::_nullIfNotExists(ResizeComponent::PARAM_HEIGHT, $params),
+        ];
+        return $attributes;
+    }
+
+    private static function _nullIfNotExists($key, $params, $boolColumn = false)
+    {
+        $result = array_key_exists($key, $params) ? $params[$key] : null;
+        if (!$boolColumn || $result !== null) {
+            return $result;
+        }
+        return $boolColumn ? 1 : 0;
+    }
 }
