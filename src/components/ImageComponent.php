@@ -47,10 +47,10 @@ class ImageComponent
      * parameter in components configuration.
      * @var string
      */
-    public $urlTemplate = '/storage/{path}';
+    public $urlTemplate = '/{path}';
 
     /** @var string */
-    public $thumbPathTemplate = '/storage/{path}';
+    public $thumbPathTemplate = '/{path}';
 
     /**
      * List of supported mime types
@@ -259,7 +259,7 @@ class ImageComponent
     {
         $directory = dirname($path);
         $filename = basename($path);
-        $url = strtr($this->urlTemplate, [
+        $url = env('IMAGE_THUMB_URL').strtr($this->urlTemplate, [
             '{path}' => $path,
             '{directory}' => $directory,
             '{filename}' => $filename,

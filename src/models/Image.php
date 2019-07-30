@@ -46,9 +46,9 @@ class Image extends Model
         'created_at'
     ];
 
-    public function getThumbs()
+    public function thumbs()
     {
-        $this->hasMany(ImageThumb::class);
+        return $this->hasMany(ImageThumb::class);
     }
 
     /**
