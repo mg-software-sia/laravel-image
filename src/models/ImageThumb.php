@@ -41,7 +41,7 @@ class ImageThumb extends Model
         'created_at'
     ];
 
-    public function getImage()
+    public function image()
     {
         return $this->belongsTo(Image::class);
     }
