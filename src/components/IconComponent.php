@@ -31,10 +31,14 @@ class IconComponent
     public $urlTemplate = '/{path}';
 
     /**
-     * Icon mime type
-     * @var string
+     * Icon mime types
+     * @var array
      */
-    public $mimeType = 'image/svg+xml';
+    public $mimeTypes = [
+        'image/svg-xml',
+        'image/svg+xml',
+        'image/svg'
+    ];
 
     /**
      * Icon mime type extension
@@ -201,7 +205,7 @@ class IconComponent
      */
     public function isMimeTypeValid($mimeType)
     {
-        return $mimeType === $this->mimeType;
+        return in_array($mimeType, $this->mimeTypes);
     }
 
     /**
