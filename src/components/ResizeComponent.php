@@ -7,7 +7,6 @@ use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
 use Imagine\Imagick\Image as ImagineImage;
 use Imagine\Imagick\Imagine;
-use yii\helpers\FileHelper;
 
 class ResizeComponent
 {
@@ -44,9 +43,14 @@ class ResizeComponent
     public function thumbFromFile($originalFile, $extension, $params)
     {
         $original = (new Imagine())->open($originalFile);
-        return $this
-            ->createImage($original, $params, $options)
-            ->get($extension, $options);
+
+        $image = $this->createImage($original, $params, $options);
+        $thumb = $image->get($extension, $options);
+
+        $original->getImagick()->clear();
+        $image->getImagick()->clear();
+
+        return $thumb;
     }
 
     /**
@@ -59,9 +63,14 @@ class ResizeComponent
     public function thumbFromContent($content, $extension, $params)
     {
         $original = (new Imagine())->load($content);
-        return $this
-            ->createImage($original, $params, $options)
-            ->get($extension, $options);
+
+        $image = $this->createImage($original, $params, $options);
+        $thumb = $image->get($extension, $options);
+
+        $original->getImagick()->clear();
+        $image->getImagick()->clear();
+
+        return $thumb;
     }
 
     /**
