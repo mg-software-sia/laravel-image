@@ -3,6 +3,7 @@
 namespace MgSoftware\Image;
 
 use Illuminate\Support\ServiceProvider;
+use MgSoftware\Image\components\IconComponent;
 use MgSoftware\Image\components\ImageComponent;
 
 class ImageServiceProvider extends ServiceProvider
@@ -11,6 +12,9 @@ class ImageServiceProvider extends ServiceProvider
     {
         $this->app->singleton('image', function($app) {
             return new ImageComponent();
+        });
+        $this->app->singleton('icon', function($app) {
+            return new IconComponent();
         });
     }
 
