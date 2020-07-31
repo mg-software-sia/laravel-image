@@ -16,14 +16,17 @@ class UpdateImageThumbsParameters extends Migration
      */
     public function up()
     {
-        $thumbs = DB::table('image_thumbs')->get();
-        foreach ($thumbs as $thumb){
-            $params = ImageType::$params[$thumb->type];
-            DB::table('image_thumbs')
-                ->where('id', $thumb->id)
-                ->update(ImageThumb::buildAttributes($params));
-        }
+        DB::table('image_thumbs')->chunkById(1000, function ($thumbs) {
+            foreach ($thumbs as $thumb) {
+                $params = ImageType::$params[$thumb->type];
+                DB::table('image_thumbs')
+                    ->where('id', $thumb->id)
+                    ->update(ImageThumb::buildAttributes($params));
+            }
+        });
+
     }
+
     /**
      * Reverse the migrations.
      *

@@ -17,7 +17,7 @@ class ImageThumbsUpdateCommand extends AbstractCommand
 {
     protected $signature = "image-thumbs:update";
 
-    protected $description = "";
+    protected $description = "Checks if all images have thumbnails with correct parameters";
 
     public function handle()
     {
