@@ -8,7 +8,6 @@ use Illuminate\Console\Command;
 use DB;
 use League\Flysystem\AdapterInterface;
 use MgSoftware\Image\components\ImageComponent;
-use MgSoftware\Image\components\ImageType;
 use MgSoftware\Image\models\Image;
 use MgSoftware\Image\models\ImageThumb;
 use function Couchbase\defaultDecoder;
@@ -23,7 +22,8 @@ class ImageThumbsUpdateCommand extends AbstractCommand
     {
         $imageCount = DB::table('images')->count();
         $this->getProgressBar()->start($imageCount);
-        $imageComponent = new ImageComponent();
+        /** @var  ImageComponent $imageComponent */
+        $imageComponent = app('image');
         foreach (DB::table('images')->cursor() as $image) {
             $thumbs = DB::table('image_thumbs')->where('image_id', $image->id)->get();
             $types = $thumbs->map->type;
