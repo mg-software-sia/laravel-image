@@ -15,6 +15,8 @@ class ImageThumbsUpdateCommand extends AbstractCommand
 
     protected $description = "Checks if all images have thumbnails with correct parameters";
 
+    private $imageContent = null;
+
     public function handle()
     {
         $imageCount = DB::table('images')->count();
@@ -22,40 +24,39 @@ class ImageThumbsUpdateCommand extends AbstractCommand
         /** @var  ImageComponent $imageComponent */
         $imageComponent = app('image');
         foreach (DB::table('images')->cursor() as $image) {
+            $this->imageContent = null;
             $thumbs = DB::table('image_thumbs')->where('image_id', $image->id)->get();
             $types = $thumbs->map->type;
             foreach (array_keys($imageComponent->types) as $type) {
                 if (!$types->contains($type)) {
-                    $this->createNewThumb($imageComponent, $image->id, $type);
+                    $this->createNewThumb($imageComponent, $image, $type);
                 }
             }
             foreach ($thumbs as $thumb) {
-                $this->checkParams($thumb, $imageComponent);
+                $this->checkParams($thumb, $imageComponent, $image);
             }
             $this->getProgressBar()->advance();
         }
         $this->getProgressBar()->finish();
     }
-
-    private function createNewThumb(ImageComponent $imageComponent, int $imageId, int $type)
+    private function createNewThumb(ImageComponent $imageComponent, Image $image, int $type)
     {
-        /** @var Image $image */
-        $image = Image::where('id', $imageId)->first();
-        $content = $imageComponent->originalStorage->get($image->path);
-        $imageComponent->createThumb($image, $content, $type);
+        if (! $this->imageContent) {
+            $this->imageContent = $imageComponent->originalStorage->get($image->path);
+        }
+        $imageComponent->createThumb($image, $this->imageContent, $type);
     }
 
-    private function checkParams($thumb, $imageComponent)
+    private function checkParams($thumb, $imageComponent, Image $image)
     {
         $type = $thumb->type;
-        $imageId = $thumb->image_id;
         $params = ImageThumb::buildAttributes($imageComponent->types[$type]);
         foreach ($params as $param => $value) {
             if ($thumb->{$param} !== $value) {
-                DB::transaction(function () use ($thumb, $imageComponent, $imageId, $type) {
+                DB::transaction(function () use ($thumb, $imageComponent, $image, $type) {
                     $path = $thumb->path;
                     DB::table('image_thumbs')->delete($thumb->id);
-                    $this->createNewThumb($imageComponent, $imageId, $type);
+                    $this->createNewThumb($imageComponent, $image, $type);
                     $imageComponent->thumbStorage->delete($path);
                 });
                 return;
