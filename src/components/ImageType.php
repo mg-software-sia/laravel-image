@@ -2,7 +2,6 @@
 
 namespace MgSoftware\Image\components;
 
-use MgSoftware\Image\components\ResizeComponent;
 
 class ImageType
 {

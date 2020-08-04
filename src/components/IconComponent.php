@@ -4,7 +4,6 @@ namespace MgSoftware\Image\components;
 
 use GuzzleHttp\Client;
 use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Http\FileHelpers;
 use Illuminate\Http\UploadedFile;
 use League\Flysystem\AdapterInterface;
 use MgSoftware\Image\models\Icon;

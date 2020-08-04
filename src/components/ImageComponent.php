@@ -4,8 +4,8 @@ namespace MgSoftware\Image\components;
 
 use GuzzleHttp\Client;
 use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Http\FileHelpers;
 use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use MgSoftware\Image\models\Image;
 use MgSoftware\Image\models\ImageThumb;
@@ -85,10 +85,10 @@ class ImageComponent
         $this->resize = new ResizeComponent();
 
         if (!$this->originalStorage) {
-            throw new InvalidConfigException('`image` storage must be set.');
+            throw new InvalidArgumentException('`image` storage must be set.');
         }
         if (!$this->thumbStorage) {
-            throw new InvalidConfigException('`thumb` storage must be set.');
+            throw new InvalidArgumentException('`thumb` storage must be set.');
         }
     }
 

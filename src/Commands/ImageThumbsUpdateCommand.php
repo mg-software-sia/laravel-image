@@ -4,13 +4,10 @@
 namespace MgSoftware\Image\Commands;
 
 use gotrip\base\Console\Commands\AbstractCommand;
-use Illuminate\Console\Command;
 use DB;
-use League\Flysystem\AdapterInterface;
 use MgSoftware\Image\components\ImageComponent;
 use MgSoftware\Image\models\Image;
 use MgSoftware\Image\models\ImageThumb;
-use function Couchbase\defaultDecoder;
 
 class ImageThumbsUpdateCommand extends AbstractCommand
 {
