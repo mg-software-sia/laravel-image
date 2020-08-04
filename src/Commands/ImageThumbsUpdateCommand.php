@@ -52,7 +52,7 @@ class ImageThumbsUpdateCommand extends AbstractCommand
     {
         $type = $thumb->type;
         $imageId = $thumb->image_id;
-        $params = ImageThumb::buildAttributes(ImageType::$params[$type]);
+        $params = ImageThumb::buildAttributes($imageComponent->types[$type]);
         foreach ($params as $param => $value) {
             if ($thumb->{$param} !== $value) {
                 DB::transaction(function () use ($thumb, $imageComponent, $imageId, $type) {
