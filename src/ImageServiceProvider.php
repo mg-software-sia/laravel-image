@@ -8,6 +8,10 @@ use MgSoftware\Image\components\ImageComponent;
 
 class ImageServiceProvider extends ServiceProvider
 {
+    protected $commands = [
+        'MgSoftware\Image\Commands\ImageThumbsUpdateCommand'
+    ];
+
     public function register()
     {
         $this->app->singleton('image', function($app) {
@@ -16,6 +20,7 @@ class ImageServiceProvider extends ServiceProvider
         $this->app->singleton('icon', function($app) {
             return new IconComponent();
         });
+        $this->commands($this->commands);
     }
 
     public function boot()

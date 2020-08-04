@@ -36,8 +36,16 @@ class ImageThumb extends Model
         'image_id',
         'type',
         'path',
-        'height',
-        'width',
+        'param_height',
+        'param_width',
+        'param_jpeg_quality',
+        'param_ratio',
+        'param_blur',
+        'param_no_zoom_in',
+        'param_crop',
+        'param_background',
+        'param_normalize',
+        'param_auto_gamma',
         'created_at'
     ];
 
@@ -48,9 +56,18 @@ class ImageThumb extends Model
 
     public static function buildAttributes($params)
     {
+        $params = ResizeComponent::mergeParamsWithDefault($params);
         $attributes = [
-            'width' => static::_nullIfNotExists(ResizeComponent::PARAM_WIDTH, $params),
-            'height' => static::_nullIfNotExists(ResizeComponent::PARAM_HEIGHT, $params),
+            'param_width' => static::_nullIfNotExists(ResizeComponent::PARAM_WIDTH, $params),
+            'param_height' => static::_nullIfNotExists(ResizeComponent::PARAM_HEIGHT, $params),
+            'param_jpeg_quality' => static::_nullIfNotExists(ResizeComponent::PARAM_JPEG_QUALITY, $params),
+            'param_ratio' => static::_nullIfNotExists(ResizeComponent::PARAM_RATIO, $params),
+            'param_blur' => static::_nullIfNotExists(ResizeComponent::PARAM_BLUR, $params),
+            'param_no_zoom_in' => static::_nullIfNotExists(ResizeComponent::PARAM_NO_ZOOM_IN, $params),
+            'param_crop' => static::_nullIfNotExists(ResizeComponent::PARAM_CROP, $params),
+            'param_background' => static::_nullIfNotExists(ResizeComponent::PARAM_BACKGROUND, $params),
+            'param_normalize' => static::_nullIfNotExists(ResizeComponent::PARAM_NORMALIZE, $params),
+            'param_auto_gamma' => static::_nullIfNotExists(ResizeComponent::PARAM_AUTO_GAMMA, $params),
         ];
         return $attributes;
     }

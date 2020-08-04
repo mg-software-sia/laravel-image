@@ -26,7 +26,7 @@ class ResizeComponent
     const RATIO_MAX = 'max'; // any of sides is equal or larger than specified (Images are not zoomed in, if they are smaller)
 
     /** @var array Default parameters */
-    public $defaultParameters = [
+    public static $defaultParameters = [
         self::PARAM_JPEG_QUALITY => 75,
         self::PARAM_RATIO => self::RATIO_MAX,
         self::PARAM_CROP => 0,
@@ -109,9 +109,9 @@ class ResizeComponent
         return $ratio;
     }
 
-    public function mergeParamsWithDefault($params)
+    public static function mergeParamsWithDefault($params)
     {
-        return array_merge($this->defaultParameters, $params);
+        return array_merge(static::$defaultParameters, $params);
     }
 
     /**
@@ -123,7 +123,7 @@ class ResizeComponent
      */
     protected function createImage(ImagineImage $original, $params, &$options)
     {
-        $params = $this->mergeParamsWithDefault($params);
+        $params = static::mergeParamsWithDefault($params);
         if (isset($params[static::PARAM_BACKGROUND])) {
             $color = (new RGB())->color($params[static::PARAM_BACKGROUND]);
             $image = (new Imagine())->create($original->getSize(), $color);
