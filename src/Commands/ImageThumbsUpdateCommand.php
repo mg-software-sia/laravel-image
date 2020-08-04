@@ -3,19 +3,22 @@
 
 namespace MgSoftware\Image\Commands;
 
-use gotrip\base\Console\Commands\AbstractCommand;
 use DB;
+use Illuminate\Console\Command;
 use MgSoftware\Image\components\ImageComponent;
 use MgSoftware\Image\models\Image;
 use MgSoftware\Image\models\ImageThumb;
+use Symfony\Component\Console\Helper\ProgressBar;
 
-class ImageThumbsUpdateCommand extends AbstractCommand
+class ImageThumbsUpdateCommand extends Command
 {
     protected $signature = "image-thumbs:update";
 
     protected $description = "Checks if all images have thumbnails with correct parameters";
 
     private $imageContent = null;
+
+    private $_progressBar;
 
     public function handle()
     {
@@ -39,9 +42,10 @@ class ImageThumbsUpdateCommand extends AbstractCommand
         }
         $this->getProgressBar()->finish();
     }
+
     private function createNewThumb(ImageComponent $imageComponent, $image, int $type)
     {
-        if (! $this->imageContent) {
+        if (!$this->imageContent) {
             $this->imageContent = $imageComponent->originalStorage->get($image->path);
         }
         /** @var Image $image */
@@ -64,5 +68,24 @@ class ImageThumbsUpdateCommand extends AbstractCommand
                 return;
             }
         }
+    }
+
+    private function createProgressBar()
+    {
+        ProgressBar::setFormatDefinition(
+            'image',
+            '<info>Memory usage:</info> %memory% <fg=cyan>%bar%</> %percent%% (%current%/%max%) <info>Elapsed/ETA:</info> %elapsed%/%estimated%' . PHP_EOL
+        );
+        $progressBar = $this->output->createProgressBar();
+        $progressBar->setFormat('image');
+        return $progressBar;
+    }
+
+    private function getProgressBar()
+    {
+        if (!$this->_progressBar) {
+            $this->_progressBar = $this->createProgressBar();
+        }
+        return $this->_progressBar;
     }
 }
