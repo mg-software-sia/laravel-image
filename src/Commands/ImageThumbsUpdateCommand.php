@@ -39,15 +39,17 @@ class ImageThumbsUpdateCommand extends AbstractCommand
         }
         $this->getProgressBar()->finish();
     }
-    private function createNewThumb(ImageComponent $imageComponent, Image $image, int $type)
+    private function createNewThumb(ImageComponent $imageComponent, $image, int $type)
     {
         if (! $this->imageContent) {
             $this->imageContent = $imageComponent->originalStorage->get($image->path);
         }
+        /** @var Image $image */
+        $image = Image::where('id', $image->id)->first();
         $imageComponent->createThumb($image, $this->imageContent, $type);
     }
 
-    private function checkParams($thumb, $imageComponent, Image $image)
+    private function checkParams($thumb, $imageComponent, $image)
     {
         $type = $thumb->type;
         $params = ImageThumb::buildAttributes($imageComponent->types[$type]);
