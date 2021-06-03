@@ -207,7 +207,7 @@ class ImageComponent
             // Generate upload path and filename
             $extension = $this->getExtensionByMimeType($mimeType);
             $image->filename = $image->id.'.'.$extension;
-            $image->path = $this->generateUploadPath($image->id).'/'.$image->filename;
+            $image->path = $this->generateUploadPath($image->id).'/'.md5(microtime()).'/'.$image->filename;
 
             // Save content
             $content = $this->resize->thumbFromFile($tmpLocation, $extension, $this->originalImageParams);
